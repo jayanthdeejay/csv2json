@@ -4,13 +4,13 @@ import sys
 
 
 def main():
+    
     csvFile = open(sys.argv[1], 'r', encoding='utf-8')
+    
     if len(sys.argv) == 3:
         jsonFile = open(sys.argv[2], 'w', encoding='utf-8')
-
     elif len(sys.argv) == 2:
         jsonFile = open('convertedTo.json', 'w', encoding='utf-8')
-
     else:
         print(repr("Usage: $ python csv2json.py [input].csv [output].json"))
         sys.exit(1)
@@ -21,23 +21,20 @@ def main():
     fieldCount = {}
     arrayOfWorks = []
     dictOfWork = {}
+
     for x in fieldNames:
         key = value = ''
         for char in x:
-            if((char >= 'a' and char <= 'z') or (char >= 'A' and char <= 'Z')):
-                key += char
-            elif(char >= '0' and char <= '9'):
+            if(char >= '0' and char <= '9'):
                 value += char
             else:
                 key += char
-        if key in fieldCount:
-            if(fieldCount[key] < int(value)):
-                fieldCount[key] = int(value)
+        if((key in fieldCount) and (fieldCount[key] < int(value))):
+            fieldCount[key] = int(value)
+        elif(value.isnumeric()):
+            fieldCount[key] = int(value)
         else:
-            if(value.isnumeric()):
-                fieldCount[key] = int(value)
-            else:
-                fieldCount[key] = 0
+            fieldCount[key] = 0
 
     # print(fieldCount)
 
